@@ -1,0 +1,33 @@
+*{
+    box-sizing: border-box;
+    
+}
+
+body{
+    background: linear-gradient(to bottom, rgba(4, 189, 189, 0.856), rgb(11, 142, 202));
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+}
+
+.weekly-container{
+    background: white;
+    width: auto;
+}
+
+.daily-container{
+    background: white;
+    margin: 3em;
+}
+
+.current{
+    background: white;
+    margin: 3rem;
+}
+
+header{
+    align-items: center;
+    justify-content: center;
+}
