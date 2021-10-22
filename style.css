@@ -9,7 +9,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
+    width: 100vw;
 }
 
 .weekly-container{
@@ -17,17 +17,63 @@ body{
     width: auto;
 }
 
-.daily-container{
+.daily-forecast-container{
+    display: flex;
+    flex-direction: row;
     background: white;
+    width: 50vw;
+}
+.daily-container{
+    display: flex;
+    background: white;
+    margin: 4em;
+   
+}
+
+.hourlyContainer{
     margin: 3em;
 }
 
-.current{
-    background: white;
-    margin: 3rem;
-}
+
 
 header{
     align-items: center;
     justify-content: center;
 }
+
+.current-container{
+    background: rgba(5, 170, 170, 0.856);
+    color:rgb(230, 228, 228);
+    display: flex;
+    flex-direction: row;
+    width: 50vw;
+    
+    
+}
+
+.current-right{
+    margin: 0 5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.current-left{
+    margin: 1em 5em 1em 3em;
+}
+
+.date{
+    font-size: 1.5rem;
+    margin: 0 0 .25em 0;
+}
+
+.units{
+    margin: 0 0 1.5em 0;
+}
+
+
+
+
+
+
