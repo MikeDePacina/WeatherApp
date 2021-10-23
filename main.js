@@ -13,32 +13,14 @@ const icon = document.querySelector('#icon');
 let units = 'metric';
 
 
-async function getWeather (unit){
+
+
+async function populateCurrentContainer(unit){
     let units = unit;
     let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&units=${units}&appid=${key}`)
     let data = await response.json();
     
-    if(units == 'metric'){
-        currTemp.innerHTML = `${data.current.temp}° C (Feels like ${data.current.feels_like}° C)`;
-        
-
-    }
-    else if(units == 'imperial') {
-        currTemp.innerHTML = `${data.current.temp}° F (Feels like ${data.current.feels_like}° F)`;
-    }
-    
-    populateCurrentContainer(data);
-   
-    
-   
-   
-    
-}
-
-function populateCurrentContainer(data){
-   
-
-    let today = new Date()
+    let today = new Date();
     const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     let day = days[today.getDay()];
     const months = ['January','February', 'March','April', 'May','June','July','August','September','October','Novermber','December']
@@ -50,6 +32,14 @@ function populateCurrentContainer(data){
     icon.src = `http://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
     currWeather.innerHTML = data.current.weather[0].description;
 
+    if(units == 'metric'){
+        currTemp.innerHTML = `${data.current.temp}° C (Feels like ${data.current.feels_like}° C)`;
+        
+
+    }
+    else if(units == 'imperial') {
+        currTemp.innerHTML = `${data.current.temp}° F (Feels like ${data.current.feels_like}° F)`;
+    }
     
     //Convert sunrise UNIX UTC to hour and minute format
     let sunriseUNIX = data.current.sunrise;
@@ -67,23 +57,30 @@ function populateCurrentContainer(data){
 
 
     
- function initializeCards(){
+ function initializeDailyCards(){
+    
     let arrayOfCards = []
-        for(let i = 0; i < 10; i++){
+    
+    for(let i = 0; i < 10; i++){
+            
             let card = document.createElement('DIV');
             card.classList.add('hourly');
             document.querySelector('.daily-container').appendChild(card);
+            
             let hour = document.createElement('DIV');
             hour.classList.add('hour');
             hour.innerHTML = 'hour';
             card.appendChild(hour)
+           
             let icon = document.createElement('IMG');
             icon.classList.add('icon');
             card.appendChild(icon);
+           
             let description = document.createElement('DIV');
             description.classList.add('description');
             card.appendChild(description);
             description.innerHTML = 'desc'
+            
             let temp = document.createElement('DIV');
             temp.classList.add('temp')
             card.appendChild(temp);
@@ -95,7 +92,7 @@ function populateCurrentContainer(data){
     return arrayOfCards;
 }
 
-let cards = initializeCards()
+let dailyCards = initializeDailyCards()
 
 
 
@@ -103,7 +100,7 @@ async function populateCards(array, unit){
     let units = unit
     let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&units=${units}&appid=${key}`)
     let data = await response.json();
-    
+   
     for(let i = 0; i < array.length; i++){
         let time = new Date(data.hourly[i].dt * 1000).getHours();
           if(time == 0)
@@ -127,77 +124,85 @@ async function populateCards(array, unit){
     
 }
 
+function initializeWeeklyContainer(){
+    
+    let weeklyDivs = []
+    
+    for(let i = 0; i < 7; i ++){
+       
+        let line = document.createElement('DIV');
+        line.classList.add('weekly-line');
+        document.querySelector('.weekly-container').appendChild(line)
+        
+        let day = document.createElement('DIV')
+        day.classList.add('weekly-day')
+        line.appendChild(day);
+        day.innerHTML = 'Day';
+        
+        let temp = document.createElement('DIV');
+        temp.classList.add('weekly-temp');
+        line.appendChild(temp);
+        temp.innerHTML = 'temp';
+        
+        let icon = document.createElement('IMG');
+        icon.classList.add('weekly-icon');
+        line.appendChild(icon);
+        
+        let desc = document.createElement('DIV');
+        desc.classList.add('weekly-desc')
+        line.appendChild(desc);
+        desc.innerHTML = 'desc';
+        
+        let lineBreak = document.createElement('HR');
+        lineBreak.classList.add('linebreak');
+        document.querySelector('.weekly-container').appendChild(lineBreak);
 
+        weeklyDivs[i] = line;
+    }
+    return weeklyDivs;
+}
 
-/*async function populateDailyContainer(){
+let weeklyForecast = initializeWeeklyContainer();
+
+async function populateWeeklyForecast(array,unit){
+    let units = unit
     let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&units=${units}&appid=${key}`)
     let data = await response.json();
-    let arrayOfCards = [];
-    for(let i = 0; i < 10; i++){
+    const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const months = ['January','February', 'March','April', 'May','June','July','August','September','October','Novermber','December']
+   
 
-        // template for hourly forecast card
-       
-        let card = document.createElement('DIV');
-        card.classList.add('hourly');
-        document.querySelector('.daily-container').appendChild(card);
-        let hour = document.createElement('DIV');
-        hour.classList.add('hour');
-        let time = new Date(data.hourly[i].dt * 1000).getHours();
-          if(time == 12)
-           hour.innerHTML = `12:00PM`; 
-         else if(time < 12)
-           hour.innerHTML = `${time}:00AM`;
-          else if(time > 12)
-           hour.innerHTML = `${time % 12}:00PM`;
-            
-
-        card.appendChild(hour)
-        let icon = document.createElement('IMG');
-        icon.classList.add('icon');
-        card.appendChild(icon);
-        icon.src = `http://openweathermap.org/img/wn/${data.hourly[i].weather[0].icon}@2x.png`;
-        let description = document.createElement('DIV');
-        description.classList.add('description');
-        description.innerHTML = data.hourly[i].weather[0].description;
-        card.appendChild(description);
-        let temp = document.createElement('DIV');
-        temp.classList.add('temp')
-        if(units == 'imperial'){
-            temp.innerHTML = `${data.hourly[i].temp} ° F`;
-        }else
-            temp.innerHTML = `${data.hourly[i].temp} ° C`;
-        card.appendChild(temp);
-        arrayOfCards[i] = card;
-    }
-        
-   return arrayOfCards;
-} 
-
-function changeHourly(data,units, array){
     for(let i = 0; i < array.length; i++){
-        if(units == 'imperial'){
-            array[i].lastChild = `${data.hourly[i].temp} ° F`;
-        }
-        else
-        array[i].lastChild = `${data.hourly[i].temp} ° C`;
+        let date = new Date(data.daily[i].dt * 1000);
+        array[i].childNodes[0].innerHTML = `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}`;
+        if(units == 'metric')
+            array[i].childNodes[1].innerHTML = `${data.daily[i].temp.min}° C / ${data.daily[i].temp.max}° C`;
+        else if(units == 'imperial')
+            array[i].childNodes[1].innerHTML = `${data.daily[i].temp.min}° F / ${data.daily[i].temp.max}° F`;
+        array[i].childNodes[2].src = `http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`;
+        array[i].childNodes[3].innerHTML = data.daily[i].weather[0].description;
     }
-} */
+}
+
+
 
 imperial.addEventListener('click', event =>{
-    getWeather('imperial');
-    populateCards(cards,'imperial')
-    //changeHourly('imperial', arrayOfCards)
+    populateCurrentContainer('imperial');
+    populateCards(dailyCards,'imperial');
+    populateWeeklyForecast(weeklyForecast,'imperial');
+    
     
 })
 
 metric.addEventListener('click', event =>{
-    getWeather('metric');
-    populateCards(cards,'metric')
-   // changeHourly('metric', arrayOfCards)
+    populateCurrentContainer('metric');
+    populateCards(dailyCards,'metric');
+    populateWeeklyForecast(weeklyForecast,'metric');
+  
     
 })
   
-//populateDailyContainer();
 
-populateCards(cards);
+
+
 

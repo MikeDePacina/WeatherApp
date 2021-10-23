@@ -5,11 +5,11 @@
 
 body{
     background: linear-gradient(to bottom, rgba(4, 189, 189, 0.856), rgb(11, 142, 202));
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100vw;
+    width: 100%;
 }
 
 
@@ -57,6 +57,7 @@ header{
     display: flex;
     flex-direction: row;
     width: 50vw;
+    margin-top: 1.5em;
     
     
 }
@@ -88,6 +89,31 @@ header{
     background: white;
 }
 
+.weekly-container{
+    justify-items: center;
+}
+.weekly-line{
+    display: flex;
+    flex-direction: row;
+    margin: 1em;
+}
 
+.weekly-day{
+    margin: 1em;
+}
 
+.weekly-temp{
+    margin: 1em;
+}
 
+.weekly-desc{
+    margin: 1em;
+}
+
+h2{
+    margin: 1.5em;
+}
+
+.weekly-icon{
+    margin-left: 20em;
+}
