@@ -95,7 +95,7 @@ header{
 .weekly-line{
     display: flex;
     flex-direction: row;
-    margin: 1em;
+    height: fit-content;
 }
 
 .weekly-day{
