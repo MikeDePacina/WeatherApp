@@ -9,9 +9,11 @@ const imperial = document.querySelector('#f');
 const unit = document.querySelector('#unit');
 const icon = document.querySelector('#icon');
 const searchBox = document.querySelector('input');
+const loc = document.querySelector('.location');
+
 
 let units = 'metric';
-
+let searchedCity;
 
 
  
@@ -96,21 +98,25 @@ let weeklyForecast = initializeWeeklyContainer();
 
 searchBox.addEventListener('keypress',(event)=>{
         if(event.keyCode == 13){
-            let city = searchBox.value;
+            searchedCity = searchBox.value;
             searchBox.value = '';
-            populateCurrentContainer(units, city);
-
+            getWeather(units,searchedCity);
+            
+              
         }
 })
-             
 
 
-async function populateCurrentContainer(unit, city){
+
+
+async function getWeather(unit,city){
     let units = unit;
     let cityName = city;
-    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`)
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${units}&appid=${key}`)
     let data = await response.json();
     
+    loc.innerHTML = data.name;
+
     let today = new Date();
     const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     let day = days[today.getDay()];
@@ -122,28 +128,36 @@ async function populateCurrentContainer(unit, city){
     
     icon.src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
     currWeather.innerHTML = data.weather[0].description;
+    
 
     if(units == 'metric'){
-        currTemp.innerHTML = `${data.temp_min}° C / ${data.temp_max}° C)`;
+        currTemp.innerHTML = `${data.main.temp_min}° C / ${data.main.temp_max}° C)`;
         
 
     }
     else if(units == 'imperial') {
-        currTemp.innerHTML = `${data.temp_min}° F / ${data.temp_max}° F)`;
+        currTemp.innerHTML = `${data.main.temp_min}° F / ${data.main.temp_max}° F)`;
     }
     
     //Convert sunrise UNIX UTC to hour and minute format
     let sunriseUNIX = data.sys.sunrise;
     let msRise = sunriseUNIX * 1000;
-    let riseHM = new Date(msRise)
-    sunrise.innerHTML = `Sunrise: ${riseHM.getHours()}:${riseHM.getMinutes()} AM`;
+    let riseHM = new Date(msRise);
+    sunrise.innerHTML = 'Sunrise: ' + riseHM.toLocaleTimeString()
+    
    
     //Convert sunset UNIX UTC to hour(MOD by 12 to convert to regular time) and minute format
     let sunsetUNIX = data.sys.sunset;
     let msSet = sunsetUNIX * 1000;
-    let setHM = new Date(msSet)
-    sunset.innerHTML = `Sunset: ${setHM.getHours() % 12}:${setHM.getMinutes()} PM`;
-   
+    let setHM = new Date(msSet);
+    sunset.innerHTML = 'Sunset: ' + setHM.toLocaleTimeString();
+    
+    let lat = data.coord.lat;
+    let lon = data.coord.lon;
+    let coords = `lat=${lat}&lon=${lon}`;
+
+    populateCards(dailyCards,units,coords);
+    populateWeeklyForecast(weeklyForecast,units,coords);
 }
 
 
@@ -152,11 +166,10 @@ async function populateCurrentContainer(unit, city){
 
 
 
-async function populateCards(array, unit, latitude, longitude){
-    let long = longitude;
-    let lat = latitude;
+async function populateCards(array, unit, coords){
+    let coord = coords;
     let units = unit;
-    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=${units}&appid=${key}`);
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?${coord}&units=${units}&appid=${key}`);
     let data = await response.json();
    
     for(let i = 0; i < array.length; i++){
@@ -184,11 +197,10 @@ async function populateCards(array, unit, latitude, longitude){
 
 
 
-async function populateWeeklyForecast(array,unit, latitude, longitude){
-    let long = longitude;
-    let lat = latitude;
+async function populateWeeklyForecast(array, unit, coords){
+    let coord = coords
     let units = unit;
-    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=${units}&appid=${key}`);
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?${coord}&units=${units}&appid=${key}`);
     let data = await response.json();
     const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const months = ['January','February', 'March','April', 'May','June','July','August','September','October','Novermber','December'];
@@ -209,19 +221,15 @@ async function populateWeeklyForecast(array,unit, latitude, longitude){
 
 
 imperial.addEventListener('click', event =>{
-    populateCurrentContainer('imperial');
-    populateCards(dailyCards,'imperial', );
-    populateWeeklyForecast(weeklyForecast,'imperial');
-    
+    let units = 'imperial';
+    getWeather(units,searchedCity);
     
 })
 
 metric.addEventListener('click', event =>{
-    populateCurrentContainer('metric', city);
-    populateCards(dailyCards,'metric', lat, long);
-    populateWeeklyForecast(weeklyForecast,'metric', lat, long);
-  
-    
+    let units = 'metric';
+    getWeather(units,searchedCity);
+   
 }) 
   
 
