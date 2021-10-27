@@ -14,7 +14,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 100vw;
 }
 
 
@@ -82,6 +82,7 @@ header{
     align-items: center;
     justify-content: center;
     margin: 1.75em 0 0 3em;
+     
 }
 
 .current-left{
@@ -119,10 +120,11 @@ header{
 .weekly-icon{
     height: auto;
     width: auto;
+   
 }
 
 .weekly-day{
-    margin: 1em;
+    margin:1em;
     justify-content: flex-start;
 }
 
@@ -167,7 +169,20 @@ input{
     margin: .5em;
 }
 
-@media screen and (max-width: 600px)  {
+img .weekly-line{
+    max-width: 100%;
+    height: auto;
+}
+
+#f:hover{
+    cursor: pointer;
+}
+
+#c:hover{
+    cursor: pointer;
+}
+
+@media (max-width: 600px)  {
     .current-container {
         width: 85%;
     }
@@ -181,3 +196,112 @@ input{
 
   
   }
+
+@media (max-width: 800px){
+    .current-container{
+        width: 90%;
+    }
+    .daily-forecast-container{
+        width: 90%;
+    }
+
+    .weekly-forecast-container{
+        width: 90%;
+    }
+}
+
+@media (max-width: 450px){
+    .right-container{
+        top: 89px;
+        
+    }
+
+    .current-right{
+        margin-left: .2em;
+    }
+
+    .weekly-line{
+        width: fit-content;
+        font-size: .9rem;
+
+    }
+    .weekly-day{
+        margin: .50em;
+    }
+
+    .weekly-desc{
+        margin: .15em;
+    }
+
+    img .weekly-line{
+        max-width: 50%;
+        height: auto;
+    }
+
+}
+
+@media (max-width: 321px ) {
+    .current-container {
+        width: 85%;
+    }
+    .daily-forecast-container{
+        width: 85%;
+    }
+
+    .weekly-forecast-container{
+        width: 85%;
+    }
+
+    .location{
+        font-size: 2rem;
+    }
+
+    .weekly-line{
+        font-size: .7rem;
+    }
+
+    .weekly-line > img{
+        width: 15%;
+        height: auto;
+    }
+
+    .weekly-desc{
+
+    }
+}
+
+@media (max-width: 1050px) and (min-width: 1000px){
+    .current-container{
+        width: 90%;
+    }
+    .daily-forecast-container{
+        width: 90%;
+    }
+
+    .weekly-forecast-container{
+        width: 90%;
+    }
+
+    *{
+        font-size: 1.45rem;
+    }
+
+    h2, .location{
+        font-size: 3rem;
+    }
+
+    h1{
+        font-size: 3.5rem;
+    }
+
+    body{
+        justify-content: center;
+        align-content: center;
+    }
+
+    input{
+        width: 60%;
+        height: 1.25em;
+        margin-left: 120px;
+    }
+}
