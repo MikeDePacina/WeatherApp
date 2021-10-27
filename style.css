@@ -1,5 +1,9 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap');
+
 *{
     box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
     
 }
 
@@ -9,6 +13,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
 }
 
@@ -56,22 +61,32 @@ header{
     color:rgb(230, 228, 228);
     display: flex;
     flex-direction: row;
-    width: 50vw;
+    width: 50%;
     margin-top: 1.5em;
+   
     
     
 }
 
+.right-container{
+    display: block;
+    position: relative;
+    top: 30px;
+    
+    width: inherit;
+}
+
 .current-right{
-    margin: 0 5em;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 1.75em 0 0 3em;
 }
 
 .current-left{
-    margin: 1em 5em 1em 3em;
+    width: 35%;
+   margin: 1em;
 }
 
 .date{
@@ -91,15 +106,24 @@ header{
 
 .weekly-container{
     justify-items: center;
+    
 }
 .weekly-line{
+    width: 80%;
     display: flex;
     flex-direction: row;
-    height: fit-content;
+    justify-content: space-around;
+    
+}
+
+.weekly-icon{
+    height: auto;
+    width: auto;
 }
 
 .weekly-day{
     margin: 1em;
+    justify-content: flex-start;
 }
 
 .weekly-temp{
@@ -108,6 +132,7 @@ header{
 
 .weekly-desc{
     margin: 1em;
+    justify-content: flex-end;
 }
 
 h2{
@@ -115,5 +140,44 @@ h2{
 }
 
 .weekly-icon{
-    margin-left: 20em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
 }
+
+.location{
+    font-size: 3rem;
+    margin-bottom: .25em;
+}
+
+input{
+    background:rgb(1, 126, 126);
+    border-style: none;
+    border-radius: .5em;
+    width: 260px;
+    height: 25px;
+    color: rgb(219, 218, 218);;
+    
+}
+
+::placeholder{
+    color: rgb(219, 218, 218);
+    font-size: 16px;
+    margin: .5em;
+}
+
+@media screen and (max-width: 600px)  {
+    .current-container {
+        width: 85%;
+    }
+    .daily-forecast-container{
+        width: 85%;
+    }
+
+    .weekly-forecast-container{
+        width: 85%;
+    }
+
+  
+  }

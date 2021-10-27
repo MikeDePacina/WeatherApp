@@ -11,10 +11,26 @@ const icon = document.querySelector('#icon');
 const searchBox = document.querySelector('input');
 const loc = document.querySelector('.location');
 
+const randomCities = ['Tokyo', 'Shanghai', 'Vancouver', 'Seoul','Los Angeles','London','Chengdu','Houston','Dallas'];
 
 let units = 'metric';
 let searchedCity;
+let lat,long;
 
+window.onload = (event) => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position =>{
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            getWeather(units,`lat=${lat}&lon=${lon}`)
+        })
+    }
+
+}
+
+function randomNumber(min, max){
+    return Math.random() * (max - min) + min;
+}
 
  
 
@@ -23,7 +39,7 @@ function initializeDailyCards(){
     
     let arrayOfCards = []
     
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 24; i++){
             
             let card = document.createElement('DIV');
             card.classList.add('hourly');
@@ -100,7 +116,7 @@ searchBox.addEventListener('keypress',(event)=>{
         if(event.keyCode == 13){
             searchedCity = searchBox.value;
             searchBox.value = '';
-            getWeather(units,searchedCity);
+            getWeather(units,`q=${searchedCity}`);
             
               
         }
@@ -112,10 +128,10 @@ searchBox.addEventListener('keypress',(event)=>{
 async function getWeather(unit,city){
     let units = unit;
     let cityName = city;
-    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${units}&appid=${key}`)
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?${cityName}&units=${units}&appid=${key}`)
     let data = await response.json();
     
-    loc.innerHTML = data.name;
+    loc.innerHTML = `${data.name},${data.sys.country}`;
 
     let today = new Date();
     const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -131,12 +147,12 @@ async function getWeather(unit,city){
     
 
     if(units == 'metric'){
-        currTemp.innerHTML = `${data.main.temp_min}° C / ${data.main.temp_max}° C)`;
+        currTemp.innerHTML = `${data.main.temp_min}° C / ${data.main.temp_max}° C`;
         
 
     }
     else if(units == 'imperial') {
-        currTemp.innerHTML = `${data.main.temp_min}° F / ${data.main.temp_max}° F)`;
+        currTemp.innerHTML = `${data.main.temp_min}° F / ${data.main.temp_max}° F`;
     }
     
     //Convert sunrise UNIX UTC to hour and minute format
@@ -152,12 +168,12 @@ async function getWeather(unit,city){
     let setHM = new Date(msSet);
     sunset.innerHTML = 'Sunset: ' + setHM.toLocaleTimeString();
     
-    let lat = data.coord.lat;
-    let lon = data.coord.lon;
-    let coords = `lat=${lat}&lon=${lon}`;
+     lat = data.coord.lat;
+     lon = data.coord.lon;
+    
 
-    populateCards(dailyCards,units,coords);
-    populateWeeklyForecast(weeklyForecast,units,coords);
+    populateCards(dailyCards,units,lat,lon);
+    populateWeeklyForecast(weeklyForecast,units,lat,lon);
 }
 
 
@@ -166,10 +182,11 @@ async function getWeather(unit,city){
 
 
 
-async function populateCards(array, unit, coords){
-    let coord = coords;
+async function populateCards(array, unit, latitude,longitude){
+    let lat = latitude;
+    let lon = longitude
     let units = unit;
-    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?${coord}&units=${units}&appid=${key}`);
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&appid=${key}`);
     let data = await response.json();
    
     for(let i = 0; i < array.length; i++){
@@ -197,10 +214,11 @@ async function populateCards(array, unit, coords){
 
 
 
-async function populateWeeklyForecast(array, unit, coords){
-    let coord = coords
+async function populateWeeklyForecast(array, unit, latitude, longitude){
+    let lat = latitude;
+    let lon = longitude;
     let units = unit;
-    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?${coord}&units=${units}&appid=${key}`);
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&appid=${key}`);
     let data = await response.json();
     const days = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const months = ['January','February', 'March','April', 'May','June','July','August','September','October','Novermber','December'];
@@ -222,14 +240,17 @@ async function populateWeeklyForecast(array, unit, coords){
 
 imperial.addEventListener('click', event =>{
     let units = 'imperial';
-    getWeather(units,searchedCity);
+    getWeather(units,`lat=${lat}&lon=${lon}`);
+    imperial.style.color = 'rgb(1, 126, 126)';
+    metric.style.color = 'rgb(230, 228, 228)';
     
 })
 
 metric.addEventListener('click', event =>{
     let units = 'metric';
-    getWeather(units,searchedCity);
-   
+    getWeather(units,`lat=${lat}&lon=${lon}`);
+    metric.style.color = 'rgb(1, 126, 126)';
+    imperial.style.color = 'rgb(230, 228, 228)';
 }) 
   
 
