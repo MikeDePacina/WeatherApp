@@ -239,7 +239,7 @@ async function populateWeeklyForecast(array, unit, latitude, longitude){
             array[i].childNodes[1].innerHTML = `${data.daily[i].temp.min}° C / ${data.daily[i].temp.max}° C`;
         else if(units == 'imperial')
             array[i].childNodes[1].innerHTML = `${data.daily[i].temp.min}° F / ${data.daily[i].temp.max}° F`;
-        array[i].childNodes[2].src = `http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`;
+        array[i].childNodes[2].src = `https://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`;
         array[i].childNodes[3].innerHTML = data.daily[i].weather[0].description;
     }
 }
