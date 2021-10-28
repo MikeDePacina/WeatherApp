@@ -208,7 +208,7 @@ async function populateCards(array, unit, latitude,longitude){
           else if(time > 12)
             array[i].childNodes[0].innerHTML = `${time % 12}:00PM`;
            
-         array[i].childNodes[1].src = `http://openweathermap.org/img/wn/${data.hourly[i].weather[0].icon}@2x.png`
+         array[i].childNodes[1].src = `https://openweathermap.org/img/wn/${data.hourly[i].weather[0].icon}@2x.png`
          array[i].childNodes[2].innerHTML = data.hourly[i].weather[0].description;
          
          if(units == 'metric')
