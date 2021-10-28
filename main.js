@@ -116,9 +116,10 @@ searchBox.addEventListener('keypress',(event)=>{
         if(event.keyCode == 13){
             searchedCity = searchBox.value;
             searchBox.value = '';
+            
             getWeather(units,`q=${searchedCity}`);
             
-              
+            
         }
 })
 
@@ -128,7 +129,10 @@ searchBox.addEventListener('keypress',(event)=>{
 async function getWeather(unit,city){
     let units = unit;
     let cityName = city;
+    try{
     let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?${cityName}&units=${units}&appid=${key}`)
+    
+   
     let data = await response.json();
     
     loc.innerHTML = `${data.name},${data.sys.country}`;
@@ -174,6 +178,10 @@ async function getWeather(unit,city){
 
     populateCards(dailyCards,units,lat,lon);
     populateWeeklyForecast(weeklyForecast,units,lat,lon);
+    }
+    catch(error){
+        alert(`Sorry, it looks like we don't have the city you searched for in our database`);
+    }
 }
 
 
