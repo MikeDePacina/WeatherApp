@@ -146,7 +146,7 @@ async function getWeather(unit,city){
     date.innerHTML = `${day}, ${month} ${today.getDate()}, ${today.getFullYear()}`;
    
     
-    icon.src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+    icon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
     currWeather.innerHTML = data.weather[0].description;
     
 
